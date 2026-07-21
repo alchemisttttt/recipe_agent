@@ -114,12 +114,18 @@ SYSTEM_PROMPT = (
 )
 
 def run_agent(usr_msg:str,history:list):
-    history.append({"role":"user","content":usr_msg})
-    response= client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=history,
-        tools=tools,
-    )
+ history.append({"role":"user","content":usr_msg})
+
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=history,
+            tools=tools,
+        )
+    except Exception as e:
+        error_reply = "Sorry, I had trouble processing that — could you try rephrasing?"
+        history.append({"role": "assistant", "content": error_reply})
+        return error_reply
 
     msg= response.choices[0].message
 
