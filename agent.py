@@ -114,7 +114,8 @@ SYSTEM_PROMPT = (
 )
 
 def run_agent(usr_msg:str,history:list):
- history.append({"role":"user","content":usr_msg})
+
+    history.append({"role":"user","content":usr_msg})
 
     try:
         response = client.chat.completions.create(
