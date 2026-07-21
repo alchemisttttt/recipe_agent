@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine, Column, String, Integer, ForeignKey, Table
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
-
-engine = create_engine('sqlite:///database.db')
+import os
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///database.db")
+engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 
