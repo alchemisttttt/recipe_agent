@@ -67,6 +67,13 @@
     <script>
         const API_URL = "/chat";
 
+
+        let sessionId = localStorage.getItem("session_id");
+        if (!sessionId) {
+            sessionId = crypto.randomUUID();
+            localStorage.setItem("session_id", sessionId);
+}
+
         async function sendMessage() {
             const input = document.getElementById("user-input");
             const message = input.value.trim();
@@ -78,7 +85,7 @@
             const response = await fetch(API_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: message })
+                body: JSON.stringify({ message: message, session_id: sessionId })
             });
 
             const data = await response.json();

@@ -12,14 +12,18 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+sessions={}
 
-history=[{"role":"system","content":SYSTEM_PROMPT}]
 
 class ChatRequest(BaseModel):
     message: str
+    session_id: str
 
 @app.post("/chat")
 def chat(request: ChatRequest):
+    if request.session_id not in sessions:
+        sessions[request.session_id] = [{"role": "system", "content": SYSTEM_PROMPT}]
+    history = sessions[request.session_id]
     reply=run_agent(request.message,history)
     return {"reply":reply}
 
